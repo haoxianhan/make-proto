@@ -15,5 +15,5 @@
 
 ## 方法
 ### gen_pt_marco2num.scm
-- 1.生成前缀为pt-type的宏 `-define(S/C-MARCO, pt-num).`
-- 2.生成前缀为pt-type的宏 `-define(S/C-MARCO, pt-alias).`
+- 1.以pt-num生成前缀为pt-type的宏 `-define(S/C_PTMARCO, pt-num). %% pt-comment`
+- 2.以pt-alias生成前缀为pt-type的宏 `-define(S/C_PTMARCO_STR, pt-alias). %% pt-comment`

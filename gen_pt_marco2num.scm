@@ -29,10 +29,11 @@
 
   (define (formatter pt)
     (let* ((pt-num (hash-ref pt "pt-num"))
+           (pt-comment (hash-ref! pt "pt-comment" ""))
            (pt-type (hash-ref pt "pt-type"))
            (pt-marco (hash-ref pt "pt-marco"))
-           (gen-marco-name (string-upcase (string-append pt-type "_" pt-marco))))
-           (string-append "-define(?" gen-marco-name ", " (number->string pt-num) ").")))
+           (marco-name (string-upcase (string-append pt-type "_" pt-marco))))
+           (string-append "-define(?" marco-name ", " (number->string pt-num) "). %% " pt-comment)))
 
   (define (try-add-pt-marco pt)
     (if (can-add-marco? pt)
