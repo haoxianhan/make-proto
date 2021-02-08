@@ -1,0 +1,31 @@
+- pt-num: 10100
+  pt-type: c
+  pt-marco: ACCOUNT_LOGIN_WX
+  pt-alias: wxlogin
+  pt-comment: 微信登录
+  pt-content:
+    code: string
+    rawData: string
+    signature: string
+    iv: string
+    encryptedData: string
+
+- pt-num: 10100
+  pt-type: s
+  pt-marco: ACCOUNT_LOGIN_WX
+  pt-alias: wxlogin
+  pt-comment: 微信登录
+  pt-content:
+    cmd: string
+    ret: int32
+    trd-session: string
+
+- pt-num: 10101
+  pt-type: c
+  pt-marco: ACCOUNT_CHECK_SESSION_WX
+  pt-alias: check-session
+  pt-comment: 微信登录-检查自定义session
+  pt-content:
+    trd-session: string
+
+
