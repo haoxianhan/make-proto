@@ -13,15 +13,18 @@
 		  (pt-marco (hash-ref pt-yaml "pt-marco")))
 	  (string-upcase (string-append pt-type "_" pt-marco))))
 
-
   (define (output-formatter-marco)
     (let* ((pt-num (hash-ref pt-yaml "pt-num"))
            (pt-comment (hash-ref! pt-yaml "pt-comment" ""))
            (marco-name (get-marco-name)))
            (string-append "-define(?" marco-name ", " (number->string pt-num) "). %% " pt-comment)))
 
+  (define (valid? f)
+	(f pt-yaml))
+
   (define (disp opt)
 	(cond ((eq? opt 'get-raw) (get-raw))
+		  ((eq? opt 'valid) valid?)
 		  ((eq? opt 'get-marco-name) (get-marco-name))
 		  ((eq? opt 'output-formatter-marco) (output-formatter-marco))
 		  (else (error "pt-unit error opt" opt))))

@@ -5,9 +5,14 @@
 (provide make-pt-marco)
 
 (define (make-pt-marco)
+
   (define marco-list '())
   (define pt-marco-set (mutable-set))
 
+  (define (print-marco-list)
+    (map (lambda(x) (display x)
+                    (newline))
+         (reverse marco-list)))
 
   (define (check-duplicate-pt? pt)
     (let ((pt-num (hash-ref pt "pt-num")))
@@ -16,11 +21,6 @@
 
   (define (add-pt-set! pt-num)
     (set-add! pt-marco-set pt-num))
-
-  (define (print-marco-list)
-    (map (lambda(x) (display x)
-                    (newline))
-         (reverse marco-list)))
 
   (define (write-file)
     (call-with-output-file "./proto.hrl"
@@ -33,13 +33,13 @@
     (set! marco-list (cons new-marco marco-list)))
 
   (define (can-add-marco? pt)
-    (and (valid-pt-num? pt) (check-duplicate-pt? pt)
-         (valid-pt-marco? pt)
-         (valid-pt-type? pt)
-         (valid-pt-comment? pt)))
+    (and ((pt 'valid) valid-pt-num?) ((pt 'valid) check-duplicate-pt?)
+         ((pt 'valid) valid-pt-marco?)
+         ((pt 'valid) valid-pt-type?)
+         ((pt 'valid) valid-pt-comment?)))
 
   (define (try-add-pt-marco pt)
-    (if (can-add-marco? (pt 'get-raw))
+    (if (can-add-marco? pt)
 	  (begin (add-marco (pt 'output-formatter-marco))
 			 (add-pt-set! (hash-ref (pt 'get-raw) "pt-num")))
       (error "pt not valid" pt)))
