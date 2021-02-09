@@ -6,6 +6,16 @@
 
 (define (make-pt-marco)
   (define marco-list '())
+  (define pt-marco-set (mutable-set))
+
+
+  (define (check-duplicate-pt? pt)
+    (let ((pt-num (hash-ref pt "pt-num")))
+      (cond ((set-member? pt-marco-set pt-num) #f)
+            (else #t))))
+
+  (define (add-pt-set! pt-num)
+    (set-add! pt-marco-set pt-num))
 
   (define (print-marco-list)
     (map (lambda(x) (display x)
@@ -23,22 +33,15 @@
     (set! marco-list (cons new-marco marco-list)))
 
   (define (can-add-marco? pt)
-    (and (valid-pt-num? pt)
+    (and (valid-pt-num? pt) (check-duplicate-pt? pt)
          (valid-pt-marco? pt)
          (valid-pt-type? pt)
          (valid-pt-comment? pt)))
 
-  (define (formatter pt)
-    (let* ((pt-num (hash-ref pt "pt-num"))
-           (pt-comment (hash-ref! pt "pt-comment" ""))
-           (pt-type (hash-ref pt "pt-type"))
-           (pt-marco (hash-ref pt "pt-marco"))
-           (marco-name (string-upcase (string-append pt-type "_" pt-marco))))
-           (string-append "-define(?" marco-name ", " (number->string pt-num) "). %% " pt-comment)))
-
   (define (try-add-pt-marco pt)
-    (if (can-add-marco? pt)
-      (add-marco (formatter pt))
+    (if (can-add-marco? (pt 'get-raw))
+	  (begin (add-marco (pt 'output-formatter-marco))
+			 (add-pt-set! (hash-ref (pt 'get-raw) "pt-num")))
       (error "pt not valid" pt)))
 
   (define (disp opt)
