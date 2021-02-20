@@ -15,12 +15,17 @@
          (reverse marco-list)))
 
   (define (check-duplicate-pt? pt)
-    (let ((pt-num (hash-ref pt "pt-num")))
-      (cond ((set-member? pt-marco-set pt-num) #f)
-            (else #t))))
+	(let ((pt-marco-name (pt 'get-marco-name))
+		  (pt-marco-type-num (pt 'get-marco-type-num)))
+	  (cond ((or (set-member? pt-marco-set pt-marco-name)
+				 (set-member? pt-marco-set pt-marco-type-num)) #f)
+			(else #t))))
 
-  (define (add-pt-set! pt-num)
-    (set-add! pt-marco-set pt-num))
+  (define (add-pt-set! pt)
+	(let ((pt-marco-name (pt 'get-marco-name))
+		  (pt-marco-type-num (pt 'get-marco-type-num)))
+	  (set-add! pt-marco-set pt-marco-name)
+	  (set-add! pt-marco-set pt-marco-type-num)))
 
   (define (write-file)
     (call-with-output-file "./proto.hrl"
@@ -33,15 +38,15 @@
     (set! marco-list (cons new-marco marco-list)))
 
   (define (can-add-marco? pt)
-    (and ((pt 'valid) valid-pt-num?) ((pt 'valid) check-duplicate-pt?)
-         ((pt 'valid) valid-pt-marco?)
-         ((pt 'valid) valid-pt-type?)
-         ((pt 'valid) valid-pt-comment?)))
+    (and ((pt 'valid-yaml) valid-pt-num?) (check-duplicate-pt? pt)
+         ((pt 'valid-yaml) valid-pt-marco?)
+         ((pt 'valid-yaml) valid-pt-type?)
+         ((pt 'valid-yaml) valid-pt-comment?)))
 
   (define (try-add-pt-marco pt)
     (if (can-add-marco? pt)
 	  (begin (add-marco (pt 'output-formatter-marco))
-			 (add-pt-set! (hash-ref (pt 'get-raw) "pt-num")))
+			 (add-pt-set! pt))
       (error "pt not valid" pt)))
 
   (define (disp opt)

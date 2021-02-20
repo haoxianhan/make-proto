@@ -17,3 +17,4 @@
 ### marco2num
 - 1.以pt-num生成前缀为pt-type的宏 `-define(S/C_PTMARCO, pt-num). %% pt-comment`
 - 2.以pt-alias生成前缀为pt-type的宏 `-define(S/C_PTMARCO_STR, pt-alias). %% pt-comment`
+- 3.主动排除宏名相同，(pt-type, pt-num)组合相同
